@@ -1,0 +1,1 @@
+{ "effect": "block", "path": "/wp-admin", "country": { "not_in": ["US"] } }

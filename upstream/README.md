@@ -2,7 +2,7 @@
 
 One entry per official specification MCPL aligns to. Each entry will become its own file stating what is taken, the pinned version, and the field-by-field mapping into `core/`. Nothing of ours lives in this folder.
 
-Status of every row: read by research run R2 through a summarizing fetch tool; not yet cross-checked by a second model.
+The machine-readable version of this table is `sources.yaml`; it is the source of truth for pins and status. Written mappings so far: `mcp-tools.md`. Every other row was read by research run R2 through a summarizing fetch tool and is not yet cross-checked by a second model.
 
 | MCPL needs | Aligns to | Pin | Canonical source |
 |---|---|---|---|

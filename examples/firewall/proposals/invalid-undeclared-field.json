@@ -1,0 +1,1 @@
+{ "effect": "block", "path": "/admin", "country": { "not_in": ["US"] }, "also_update_dns": true }

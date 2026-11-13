@@ -1,0 +1,129 @@
+# Tracked upstream sources for MCPL. One entry per official specification.
+# status: verified = read from the primary page on `read` date by the author of this file;
+#         research = read by research run R2 through a summarizing fetch tool, not yet cross-checked.
+# module: path of the optional git submodule that tracks the source repository, if any.
+# A missing submodule must never break anything; the pin below is the source of truth.
+schema: 1
+updated: 2026-11-13
+sources:
+  - id: mcp-tools
+    need: Describe an application's inputs and actions
+    spec: MCP tool definition (JSON Schema 2020-12)
+    pin: "2026-07-28"
+    url: https://modelcontextprotocol.io/specification/2026-07-28/server/tools
+    repo: https://github.com/modelcontextprotocol/modelcontextprotocol
+    module: upstream/modules/mcp-spec
+    alignment: align
+    status: verified
+    read: 2026-11-13
+    mapping: upstream/mcp-tools.md
+  - id: mcp-elicitation-form
+    need: Ask a multiple-choice question; collect non-secret details
+    spec: MCP elicitation, form mode
+    pin: "2026-07-28 (also serve 2025-11-25)"
+    url: https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation
+    repo: https://github.com/modelcontextprotocol/modelcontextprotocol
+    module: upstream/modules/mcp-spec
+    alignment: align
+    status: research
+    mapping: null
+  - id: mcp-elicitation-url
+    need: Collect a secret or a third-party authorization
+    spec: MCP elicitation, URL mode
+    pin: "2026-07-28"
+    url: https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation
+    repo: https://github.com/modelcontextprotocol/modelcontextprotocol
+    module: upstream/modules/mcp-spec
+    alignment: align
+    status: research
+    mapping: null
+  - id: mcp-authorization
+    need: Sign-in to the server
+    spec: MCP authorization
+    pin: "2026-07-28"
+    url: https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization
+    repo: https://github.com/modelcontextprotocol/modelcontextprotocol
+    module: upstream/modules/mcp-spec
+    alignment: align
+    status: research
+    mapping: null
+  - id: mcp-apps
+    need: Rich inline UI; thumbs or slider
+    spec: MCP Apps
+    pin: "stable 2026-01-26"
+    url: https://github.com/modelcontextprotocol/ext-apps
+    repo: https://github.com/modelcontextprotocol/ext-apps
+    module: upstream/modules/mcp-ext-apps
+    alignment: align
+    status: research
+    mapping: null
+  - id: mcp-registry
+    need: Being found
+    spec: MCP Registry server.json
+    pin: "schema 2025-12-11, preview"
+    url: https://modelcontextprotocol.io/registry
+    repo: https://github.com/modelcontextprotocol/registry
+    module: upstream/modules/mcp-registry
+    alignment: align
+    status: research
+    mapping: null
+  - id: agents-md
+    need: Always-on context
+    spec: AGENTS.md
+    pin: unversioned
+    url: https://agents.md
+    repo: null   # github.com/agentsmd/agents.md resolves; not yet confirmed as the official repository
+    module: null
+    alignment: align
+    status: research
+    mapping: null
+  - id: agent-skills
+    need: Guidance loaded on demand
+    spec: Agent Skills
+    pin: unversioned
+    url: https://agentskills.io/specification
+    repo: null   # github.com/agentskills/agentskills resolves; not yet confirmed as the official repository
+    module: null
+    alignment: align
+    status: research
+    mapping: null
+  - id: agent-plugins
+    need: Packaging
+    spec: Agent Plugins
+    pin: "1.0.0"
+    url: https://agent-plugins.org
+    repo: null
+    module: null
+    alignment: align
+    status: research
+    mapping: null
+  - id: a2ui
+    need: Rich UI where a host can render it, or inside MCPL's own app view
+    spec: A2UI
+    pin: "v1.0 per site; v0.9.1 production per repo (unresolved)"
+    url: https://github.com/a2ui-project/a2ui
+    repo: https://github.com/a2ui-project/a2ui
+    module: null
+    alignment: optional
+    status: research
+    mapping: null
+  - id: ag-ui
+    need: Embedded mode only, where the application owns the frontend
+    spec: AG-UI
+    pin: "1.0"
+    url: https://github.com/ag-ui-protocol/ag-ui
+    repo: https://github.com/ag-ui-protocol/ag-ui
+    module: null
+    alignment: optional
+    status: research
+    mapping: null
+  - id: webmcp
+    need: Optional web output of the same inputs-and-actions inventory
+    spec: WebMCP
+    pin: "draft dated 2026-11-11, not standards track"
+    url: https://github.com/webmachinelearning/webmcp
+    repo: https://github.com/webmachinelearning/webmcp
+    module: null
+    alignment: optional
+    status: research
+    mapping: null

@@ -1,0 +1,9 @@
+[submodule "upstream/modules/mcp-spec"]
+	path = upstream/modules/mcp-spec
+	url = https://github.com/modelcontextprotocol/modelcontextprotocol.git
+[submodule "upstream/modules/mcp-ext-apps"]
+	path = upstream/modules/mcp-ext-apps
+	url = https://github.com/modelcontextprotocol/ext-apps.git
+[submodule "upstream/modules/mcp-registry"]
+	path = upstream/modules/mcp-registry
+	url = https://github.com/modelcontextprotocol/registry.git

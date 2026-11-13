@@ -2,7 +2,7 @@
 
 A schema-governed framework that lets an application act as its own subject-matter expert for any AI.
 
-**Status (2026-11-12): structure only. No schema or code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
+**Status (2026-11-13): first schema part written (inputs and actions, draft 0.1) with a worked example and a validator. Rules, posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
 
 ## The idea in six lines
 
@@ -21,9 +21,25 @@ A schema-governed framework that lets an application act as its own subject-matt
 | `core/` | Normalize | The single MCPL schema those mappings reduce to. |
 | `extensions/` | Extend | What no upstream defines, labeled as ours: workflows and navigation, signal provenance, restraint policy, approval evidence. |
 | `routes/` | Route | Runtime choices by what the host declares it supports. |
-| `examples/` | Show | Worked cases. |
+| `examples/` | Show | Worked cases, each with proposals that must pass and proposals that must be rejected. |
+| `tools/` | Check | `validate.py` checks every action entry and every example proposal. |
 
 An AI reading this repository should see three moves: these are the standards, this is how they reduce to one shape, this is what MCPL adds. Every borrowed piece traces to its official source.
+
+## Linked modules
+
+| Link | What it is |
+|---|---|
+| [INCRAM](https://github.com/wiredFRONT/INCRAM) | The umbrella. Holds the decisions ledger, the research and the rule schema. It carries this repository as the optional submodule `modules/mcpl`. |
+| `upstream/sources.yaml` | The tracked list of official specifications MCPL aligns to, with pin, status and mapping file for each. |
+| `upstream/modules/` | Optional git submodules tracking the official MCP specification, MCP Apps and MCP Registry repositories. |
+
+## Check it
+
+```
+pip install jsonschema
+python3 tools/validate.py
+```
 
 ## Two ways MCPL runs
 

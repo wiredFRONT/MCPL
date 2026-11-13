@@ -1,12 +1,26 @@
 # core: normalize
 
-Not yet written. This folder will hold the single MCPL schema that the upstream mappings reduce to.
+The single MCPL schema that the upstream mappings reduce to. Draft; nothing here is accepted until it is in the INCRAM ledger.
 
-Planned parts, in the order they will be written:
-1. **Inputs and actions.** One entry per thing the application accepts or does, in the MCP tool-definition shape, so the same entry can be served over MCP and emitted for the web.
-2. **Rules.** What a valid result looks like for each action. This is what validates an AI's proposal before anything is applied.
-3. **Posture.** Foundational by default; prototype only when stated; ask once when unknown.
-4. **Screens and routes.** Declared, so guidance can link to the right place.
-5. **Boundary.** What the application declares it knows, and the required answer when a question falls outside it.
+| # | Part | Status | File |
+|---|---|---|---|
+| 1 | **Inputs and actions.** One entry per thing the application accepts or does | draft 0.1 | `action.schema.json` |
+| 2 | **Rules.** Named guards run on a proposal after schema validation and before preview | not written | |
+| 3 | **Posture.** Foundational by default; prototype only when stated; ask once when unknown | not written (an action can already list its postures) | |
+| 4 | **Screens and routes.** Declared, so guidance can link to the right place | not written (an action can already name its screen) | |
+| 5 | **Boundary.** What the application declares it knows, and the required answer outside it | not written (an action already carries its outside-boundary answer) | |
 
-Every field will state which upstream it maps to, or that it is an MCPL extension.
+## Part 1: the action entry
+
+An entry has two halves and they never mix:
+
+- `tool`: UPSTREAM. The MCP 2026-07-28 tool definition, unchanged. See `../upstream/mcp-tools.md`.
+- `mcpl`: MCPL. Consequence, approval route, undo, preview, screen, posture, guards, outside-boundary answer.
+
+What the schema enforces today:
+
+- The input schema must refuse fields the application did not declare.
+- A consequential action must have a plain-language preview and an approval; "none" is refused.
+- An action with no undo must say why.
+
+What it does not do yet: guards such as "do not lock the person out of their own admin page" are only named. They need part 2.

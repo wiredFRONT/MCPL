@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/wiredFRONT/MCPL/core/action.schema.json",
+  "title": "MCPL action entry",
+  "description": "One thing an application accepts or does. `tool` is the upstream MCP tool definition, unchanged, so the same entry can be served over MCP as-is. `mcpl` is what MCPL adds. Draft 0.1, not accepted.",
+  "type": "object",
+  "required": ["tool", "mcpl"],
+  "additionalProperties": false,
+  "properties": {
+    "tool": { "$ref": "#/$defs/mcpTool" },
+    "mcpl": { "$ref": "#/$defs/mcplAction" }
+  },
+  "$defs": {
+    "mcpTool": {
+      "description": "UPSTREAM. MCP 2026-07-28 Tool data type, read from the specification page on 2026-11-13. Field list: name, title, description, icons, inputSchema, outputSchema, annotations.",
+      "type": "object",
+      "required": ["name", "description", "inputSchema"],
+      "properties": {
+        "name": {
+          "description": "UPSTREAM: 1 to 128 characters; letters, digits, underscore, hyphen, dot.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string", "minLength": 1 },
+        "icons": { "type": "array" },
+        "inputSchema": {
+          "description": "UPSTREAM: a valid JSON Schema object, 2020-12 unless `$schema` says otherwise. MCPL tightening: must be type object with additionalProperties false, so a proposal cannot carry a field the application did not declare.",
+          "type": "object",
+          "required": ["type", "additionalProperties"],
+          "properties": {
+            "type": { "const": "object" },
+            "additionalProperties": { "const": false }
+          }
+        },
+        "outputSchema": { "type": "object" },
+        "annotations": {
+          "description": "UPSTREAM: optional hints, untrusted unless from a trusted server. `readOnlyHint` is confirmed in host documentation; the full member list for 2026-07-28 is UNVERIFIED.",
+          "type": "object",
+          "properties": {
+            "readOnlyHint": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "mcplAction": {
+      "description": "MCPL. Everything here is ours, not a standard.",
+      "type": "object",
+      "required": ["consequence", "approval", "undo", "outside_boundary"],
+      "additionalProperties": false,
+      "properties": {
+        "consequence": {
+          "description": "How much damage a wrong call can do. Drives the approval route.",
+          "enum": ["read", "reversible", "consequential"]
+        },
+        "approval": {
+          "description": "none: no approval. host: the host's own prompt, recorded as host-attested. served-page: a page the application serves, the only route that proves a human act.",
+          "enum": ["none", "host", "served-page"]
+        },
+        "undo": {
+          "description": "The action that reverses this one, by tool name, or null with a stated reason.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "action": { "type": ["string", "null"] },
+            "reason_if_none": { "type": "string" }
+          },
+          "required": ["action"]
+        },
+        "preview": {
+          "description": "Plain-language template shown before approval. Placeholders in braces name inputSchema properties.",
+          "type": "string"
+        },
+        "screen": {
+          "description": "Declared route in the application where the result appears, so MCPL can hand back a link.",
+          "type": "string"
+        },
+        "posture": {
+          "description": "Postures in which the action is offered. Foundational is the default when nothing is stated.",
+          "type": "array",
+          "items": { "enum": ["foundational", "prototype"] },
+          "uniqueItems": true
+        },
+        "guards": {
+          "description": "Named checks run on a proposal after schema validation and before preview. Defined in core part 2 (rules).",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "outside_boundary": {
+          "description": "What MCPL says when a request touches this action's area but is not something the application declares.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "consequence": { "const": "consequential" } } },
+          "then": {
+            "required": ["preview"],
+            "properties": { "approval": { "enum": ["host", "served-page"] } }
+          }
+        },
+        {
+          "if": { "properties": { "undo": { "properties": { "action": { "const": null } } } } },
+          "then": { "properties": { "undo": { "required": ["reason_if_none"] } } }
+        }
+      ]
+    }
+  }
+}

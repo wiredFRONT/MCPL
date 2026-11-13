@@ -1,0 +1,37 @@
+{
+  "tool": {
+    "name": "create_access_rule",
+    "title": "Create access rule",
+    "description": "Create a rule that allows or blocks visitors to a path, matched by country. Rules apply to the path and everything under it.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["effect", "path", "country"],
+      "properties": {
+        "effect": { "enum": ["allow", "block"] },
+        "path": { "enum": ["/", "/admin", "/admin/api", "/account"] },
+        "country": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "maxProperties": 1,
+          "properties": {
+            "in": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z]{2}$" }, "minItems": 1, "uniqueItems": true },
+            "not_in": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z]{2}$" }, "minItems": 1, "uniqueItems": true }
+          }
+        }
+      }
+    },
+    "annotations": { "readOnlyHint": false }
+  },
+  "mcpl": {
+    "consequence": "consequential",
+    "approval": "served-page",
+    "undo": { "action": "delete_access_rule" },
+    "preview": "Visitors matching country {country} will get effect {effect} on {path} and everything under it.",
+    "screen": "/settings/access-rules",
+    "posture": ["foundational", "prototype"],
+    "guards": ["no-self-lockout"],
+    "outside_boundary": "This application manages its own access rules only. It does not manage DNS, certificates or other providers' firewalls."
+  }
+}

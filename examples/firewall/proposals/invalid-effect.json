@@ -1,0 +1,1 @@
+{ "effect": "drop-all-traffic", "path": "/admin", "country": { "not_in": ["US"] } }
