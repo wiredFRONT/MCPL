@@ -56,7 +56,7 @@
           "enum": ["read", "reversible", "consequential"]
         },
         "approval": {
-          "description": "none: no approval. host: the host's own prompt, recorded as host-attested. served-page: a page the application serves, the only route that proves a human act.",
+          "description": "none: no approval. host: the host's own prompt, recorded as host-attested. served-page: a page the application serves, where the application itself observes the request. This is stronger than a host report but is not yet proof of a human act; the assurance model is unwritten (INCRAM ledger, R2 cross-check).",
           "enum": ["none", "host", "served-page"]
         },
         "undo": {
