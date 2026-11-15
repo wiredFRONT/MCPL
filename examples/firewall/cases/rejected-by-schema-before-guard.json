@@ -1,0 +1,7 @@
+{
+  "request": "block everyone outside the US from admin and also update my DNS",
+  "context": { "requester": { "country": "US", "is_admin": true } },
+  "action": "create_access_rule",
+  "proposal": { "effect": "block", "path": "/admin", "country": { "not_in": ["US"] }, "also_update_dns": true },
+  "expect": { "outcome": "rejected", "by": "schema" }
+}

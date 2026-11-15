@@ -1,0 +1,7 @@
+{
+  "request": "block everyone outside the US from the admin page",
+  "context": { "requester": { "country": "US", "is_admin": true } },
+  "action": "create_access_rule",
+  "proposal": { "effect": "block", "path": "/admin", "country": { "not_in": ["US"] } },
+  "expect": { "outcome": "accepted" }
+}

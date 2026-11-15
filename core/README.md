@@ -5,7 +5,7 @@ The single MCPL schema that the upstream mappings reduce to. Draft; nothing here
 | # | Part | Status | File |
 |---|---|---|---|
 | 1 | **Inputs and actions.** One entry per thing the application accepts or does | draft 0.1 | `action.schema.json` |
-| 2 | **Rules.** Named guards run on a proposal after schema validation and before preview | not written | |
+| 2 | **Rules (guards).** Named checks run on a proposal after schema validation and before preview | draft 0.1 | `guard.schema.json` |
 | 3 | **Posture.** Foundational by default; prototype only when stated; ask once when unknown | not written (an action can already list its postures) | |
 | 4 | **Screens and routes.** Declared, so guidance can link to the right place | not written (an action can already name its screen) | |
 | 5 | **Boundary.** What the application declares it knows, and the required answer outside it | not written (an action already carries its outside-boundary answer) | |
@@ -23,4 +23,15 @@ What the schema enforces today:
 - A consequential action must have a plain-language preview and an approval; "none" is refused.
 - An action with no undo must say why.
 
-What it does not do yet: guards such as "do not lock the person out of their own admin page" are only named. They need part 2.
+## Part 2: the guard entry
+
+A guard catches a proposal that is well-formed but harmful in this person's situation. Everything about a guard is MCPL; no upstream defines it.
+
+- It runs after the input schema and before any preview. Order of decision: schema, then guards, then accepted.
+- It reads context the application supplies (for example where the person signs in from). The AI never supplies context.
+- It returns pass, fail or unknown. On fail the guard either rejects or requires explicit confirmation. On unknown it asks one question or rejects. A guard never passes on missing context.
+- It decides only. It never changes anything.
+
+Worked guard: `../examples/firewall/guards/no-self-lockout.guard.json`, with seven decision cases in `../examples/firewall/cases/`.
+
+Not settled: the guard's code is Python in the example because the validator is. Which languages a real application may write guards in, and how they are sandboxed, is open.

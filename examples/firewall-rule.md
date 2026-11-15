@@ -1,6 +1,6 @@
 # Example: a plain-language firewall rule
 
-The action entry and test proposals for this walk-through are in `firewall/` and are checked by `tools/validate.py`. Steps 5 to 9 below are still illustration: they need parts of `core/` and `extensions/` that are not written.
+The action entry and test proposals for this walk-through are in `firewall/` and are checked by `tools/validate.py`. Steps 6 to 9 below are still illustration: they need parts of `core/` and `extensions/` that are not written.
 
 ## The request
 A person types: "block everyone outside the US from the admin page."
@@ -33,4 +33,5 @@ The AI's guess is never the output. The schema decides what is acceptable, the p
 | A proposal with an effect outside the allowed values | rejected today: `invalid-effect.json` |
 | An ambiguous request ("block the bad guys") | not covered: needs the restraint extension |
 | A hostile request hidden in pasted text | not covered: needs signal provenance |
-| A request that would lock the person out of their own admin page | named as the guard `no-self-lockout`; not enforced until rules are written |
+| A request that would lock the person out of their own admin page | rejected today by the guard `no-self-lockout`: `firewall/cases/lockout-admin-outside-us.json`, and through a parent path in `lockout-through-parent-path.json` |
+| The same request when MCPL does not know where the person signs in from | one question is asked, nothing is applied: `firewall/cases/ask-when-country-unknown.json` |

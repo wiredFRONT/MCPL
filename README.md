@@ -2,7 +2,7 @@
 
 A schema-governed framework that lets an application act as its own subject-matter expert for any AI.
 
-**Status (2026-11-13): first schema part written (inputs and actions, draft 0.1) with a worked example and a validator. Rules, posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
+**Status (2026-11-15): two schema parts written as drafts (actions; guards) with a worked example whose guard is enforced and tested. Posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
 
 ## The idea in six lines
 

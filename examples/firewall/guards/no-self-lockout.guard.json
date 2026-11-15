@@ -1,0 +1,11 @@
+{
+  "id": "no-self-lockout",
+  "title": "A rule must not lock the person out of their own admin page",
+  "applies_to": ["create_access_rule"],
+  "needs_context": ["requester.country", "requester.is_admin"],
+  "on_fail": "reject",
+  "on_unknown": "ask",
+  "fail_message": "This rule would block you from the admin page, because you are connecting from a country it blocks. Nothing was changed.",
+  "ask_message": "Which country do you sign in to the admin page from? I need this so the rule cannot lock you out.",
+  "implementation": "no_self_lockout.py"
+}

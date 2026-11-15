@@ -1,0 +1,7 @@
+{
+  "request": "block Germany from the account page",
+  "context": { "requester": { "country": "DE", "is_admin": true } },
+  "action": "create_access_rule",
+  "proposal": { "effect": "block", "path": "/account", "country": { "in": ["DE"] } },
+  "expect": { "outcome": "accepted" }
+}

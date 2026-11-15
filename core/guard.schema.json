@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/wiredFRONT/MCPL/core/guard.schema.json",
+  "title": "MCPL guard entry",
+  "description": "MCPL. A named check run on a proposal after it passes the action's input schema and before any preview is shown. A guard catches what a schema cannot: a proposal that is well-formed but harmful in this person's situation. Draft 0.1, not accepted.",
+  "type": "object",
+  "required": ["id", "title", "applies_to", "needs_context", "on_fail", "on_unknown", "fail_message", "implementation"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "applies_to": {
+      "description": "Tool names of the actions this guard runs on.",
+      "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true
+    },
+    "needs_context": {
+      "description": "Facts about the person or the application the guard needs. Dotted paths into the context object the application supplies. The AI never supplies context.",
+      "type": "array", "items": { "type": "string" }, "uniqueItems": true
+    },
+    "on_fail": {
+      "description": "reject: the proposal is refused and the AI is told why. confirm: the person is shown the consequence and must approve it explicitly.",
+      "enum": ["reject", "confirm"]
+    },
+    "on_unknown": {
+      "description": "What happens when needed context is missing. ask: one question, with choices. reject: fail closed. A guard never passes on missing context.",
+      "enum": ["ask", "reject"]
+    },
+    "fail_message": { "description": "Plain words, shown to the person and returned to the AI.", "type": "string", "minLength": 1 },
+    "ask_message": { "description": "The one question asked when context is missing.", "type": "string" },
+    "implementation": {
+      "description": "Path, relative to the guard file, of the code that decides. It exposes check(proposal, context) and returns pass, fail or unknown.",
+      "type": "string"
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "on_unknown": { "const": "ask" } } }, "then": { "required": ["ask_message"] } }
+  ]
+}
