@@ -1,0 +1,29 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the INCRAM ID registry
+        uses: actions/checkout@v4
+        with:
+          repository: wiredFRONT/INCRAM
+          path: incram-umbrella
+          sparse-checkout: registry
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jsonschema pyyaml
+      - name: Actions, guards, proposals, cases and links to INCRAM
+        env:
+          INCRAM_REGISTRY: incram-umbrella/registry/ids.yaml
+        run: python3 tools/validate.py
