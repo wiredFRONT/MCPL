@@ -1,0 +1,7 @@
+{
+  "request": "set the key both ways",
+  "context": {},
+  "action": "set_config_value",
+  "proposal": { "key": "PAYMENT_SECRET_KEY", "value": "x", "secret_ref": "ask-on-served-page" },
+  "expect": { "outcome": "rejected", "by": "schema" }
+}

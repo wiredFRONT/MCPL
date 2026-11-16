@@ -2,7 +2,7 @@
 
 A schema-governed framework that lets an application act as its own subject-matter expert for any AI.
 
-**Status (2026-11-15): two schema parts written as drafts (actions; guards) with a worked example whose guard is enforced and tested. Posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
+**Status (2026-11-16): two schema parts written as drafts (actions; guards) with two worked examples whose guards are enforced and tested; one guard enforces an INCRAM rule by ID. Posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
 
 ## The idea in six lines
 
@@ -30,7 +30,9 @@ An AI reading this repository should see three moves: these are the standards, t
 
 | Link | What it is |
 |---|---|
-| [INCRAM](https://github.com/wiredFRONT/INCRAM) | The umbrella. Holds the decisions ledger, the research and the rule schema. It carries this repository as the optional submodule `modules/mcpl`. |
+| [INCRAM](https://github.com/wiredFRONT/INCRAM) | The umbrella. Holds the decisions ledger, the research, the rule schema and the rules. It carries this repository as the optional submodule `modules/mcpl`. |
+| `incram.yaml` | The link file: which umbrella, which commit of it this repository was checked against, what MCPL consumes from it and provides to it. |
+| `implements` in a guard | The INCRAM rule IDs that guard enforces. Checked against INCRAM's ID registry from both repositories. First link: the guard `no-secret-in-proposal` enforces INCRAM rule `r-4k7q2m`. |
 | `upstream/sources.yaml` | The tracked list of official specifications MCPL aligns to, with pin, status and mapping file for each. |
 | `upstream/modules/` | Optional git submodules tracking the official MCP specification, MCP Apps and MCP Registry repositories. |
 

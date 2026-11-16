@@ -1,0 +1,32 @@
+{
+  "tool": {
+    "name": "set_config_value",
+    "title": "Set a configuration value",
+    "description": "Set one named configuration value for the application. Secrets are never passed in `value`: pass `secret_ref` and the person enters the secret on a page the application serves.",
+    "inputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$" },
+        "value": { "type": "string", "maxLength": 500 },
+        "secret_ref": { "const": "ask-on-served-page" }
+      },
+      "oneOf": [
+        { "required": ["value"], "not": { "required": ["secret_ref"] } },
+        { "required": ["secret_ref"], "not": { "required": ["value"] } }
+      ]
+    },
+    "annotations": { "readOnlyHint": false }
+  },
+  "mcpl": {
+    "consequence": "reversible",
+    "approval": "host",
+    "undo": { "action": "set_config_value" },
+    "preview": "The setting {key} will be changed.",
+    "screen": "/settings/configuration",
+    "posture": ["foundational", "prototype"],
+    "guards": ["no-secret-in-proposal"],
+    "outside_boundary": "This application sets its own configuration only. It does not change settings at your hosting provider or in other services."
+  }
+}

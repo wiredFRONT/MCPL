@@ -1,0 +1,19 @@
+# Link from MCPL to the INCRAM umbrella.
+# INCRAM is the source of rules; MCPL enforces some of them when an AI proposes a change.
+# MCPL refers to INCRAM rules by ID only. It does not carry INCRAM as a submodule, because INCRAM
+# already carries MCPL at modules/mcpl; the link is checked from both sides instead.
+schema: 1
+umbrella:
+  repo: https://github.com/wiredFRONT/INCRAM
+  ledger: docs/decisions/ledger.md
+  id_registry: registry/ids.yaml
+  checked_against_commit: 9a46cdf166f4bf9ab3e53be2aff251959b5205b9
+consumes:
+  - what: rule IDs
+    where: guards/*.guard.json, field `implements`
+    check: tools/validate.py (when an INCRAM checkout is found) and INCRAM linter/check_modules.py
+provides:
+  - what: action entry schema
+    file: core/action.schema.json
+  - what: guard entry schema
+    file: core/guard.schema.json

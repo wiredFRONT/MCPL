@@ -32,6 +32,8 @@ A guard catches a proposal that is well-formed but harmful in this person's situ
 - It returns pass, fail or unknown. On fail the guard either rejects or requires explicit confirmation. On unknown it asks one question or rejects. A guard never passes on missing context.
 - It decides only. It never changes anything.
 
-Worked guard: `../examples/firewall/guards/no-self-lockout.guard.json`, with seven decision cases in `../examples/firewall/cases/`.
+Worked guards: `../examples/firewall/guards/no-self-lockout.guard.json` (seven decision cases) and `../examples/app-config/guards/no-secret-in-proposal.guard.json` (five decision cases).
+
+- A guard may list the INCRAM rules it enforces under `implements`, by rule ID only. That is the link between a standard in INCRAM and its enforcement in MCPL: the rule says what must be true, the guard refuses a proposal that would break it.
 
 Not settled: the guard's code is Python in the example because the validator is. Which languages a real application may write guards in, and how they are sandboxed, is open.

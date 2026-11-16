@@ -1,0 +1,7 @@
+{
+  "request": "set the support email to help@example.org",
+  "context": {},
+  "action": "set_config_value",
+  "proposal": { "key": "SUPPORT_EMAIL", "value": "help@example.org" },
+  "expect": { "outcome": "accepted" }
+}

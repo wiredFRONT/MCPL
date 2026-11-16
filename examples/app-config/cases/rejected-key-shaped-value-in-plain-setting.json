@@ -1,0 +1,7 @@
+{
+  "request": "put this in the notes field",
+  "context": {},
+  "action": "set_config_value",
+  "proposal": { "key": "DEPLOY_NOTES", "value": "use AKIAIOSFODNN7EXAMPLE for uploads" },
+  "expect": { "outcome": "rejected", "by": "guard", "guard": "no-secret-in-proposal" }
+}

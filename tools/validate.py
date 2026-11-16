@@ -10,6 +10,10 @@ For each examples/<app>/ folder:
   proposals/invalid-*.json must be rejected by it
   cases/*.json             the full decision (schema, then guards) must equal the case's `expect`
 
+Links to INCRAM: a guard may list INCRAM rule IDs under `implements`. They are checked against the
+INCRAM ID registry when one is found: $INCRAM_REGISTRY, then ../../registry/ids.yaml (MCPL checked out
+as INCRAM's modules/mcpl), then ../incram/registry/ids.yaml (sibling checkout). Needs pyyaml for that.
+
 Order of decision, which is the order MCPL itself uses:
   1. input schema  -> rejected by schema
   2. each guard    -> rejected by guard / ask / confirm
@@ -17,6 +21,7 @@ Order of decision, which is the order MCPL itself uses:
 """
 import importlib.util
 import json
+import os
 import pathlib
 import sys
 
@@ -72,6 +77,23 @@ def decide(action, guards, proposal, context):
     return {"outcome": "accepted"}, ""
 
 
+def incram_ids():
+    """Return (set of registered INCRAM rule IDs, where they came from), or (None, reason)."""
+    candidates = [os.environ.get("INCRAM_REGISTRY"), ROOT / ".." / ".." / "registry" / "ids.yaml", ROOT / ".." / "incram" / "registry" / "ids.yaml"]
+    for candidate in candidates:
+        if candidate and pathlib.Path(candidate).is_file():
+            try:
+                import yaml
+            except ImportError:
+                return None, "pyyaml is not installed"
+            entries = yaml.safe_load(pathlib.Path(candidate).read_text(encoding="utf-8"))["ids"]
+            return {entry["id"] for entry in entries}, str(pathlib.Path(candidate).resolve())
+    return None, "no INCRAM checkout found"
+
+
+registered, registry_source = incram_ids()
+implemented = {}
+
 action_validator = schema_validator("action.schema.json")
 guard_validator = schema_validator("guard.schema.json")
 
@@ -83,6 +105,10 @@ for app_dir in sorted(p for p in (ROOT / "examples").iterdir() if p.is_dir()):
         report(not errors, guard_file, errors[0].message if errors else "")
         if not errors:
             guards[guard["id"]] = (guard, load_check(guard_file, guard))
+            for rule_id in guard.get("implements", []):
+                implemented.setdefault(rule_id, []).append(str(guard_file.relative_to(ROOT)))
+                if registered is not None and rule_id not in registered:
+                    report(False, guard_file, f"implements {rule_id}, which is not in the INCRAM ID registry")
 
     actions = {}
     for action_file in sorted(app_dir.glob("*.action.json")):
@@ -118,5 +144,9 @@ for app_dir in sorted(p for p in (ROOT / "examples").iterdir() if p.is_dir()):
         ok = got == case["expect"]
         report(ok, case_file, json.dumps(got) if ok else f"expected {json.dumps(case['expect'])}, got {json.dumps(got)}")
 
+for rule_id, where in sorted(implemented.items()):
+    print(f"link  INCRAM {rule_id} is enforced by {', '.join(where)}")
+if implemented:
+    print(f"links {'checked against ' + registry_source if registered is not None else 'NOT checked: ' + registry_source}")
 print(f"{state['checked']} checked, {state['failed']} failed")
 sys.exit(1 if state["failed"] else 0)
