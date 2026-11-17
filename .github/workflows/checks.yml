@@ -27,3 +27,5 @@ jobs:
         env:
           INCRAM_REGISTRY: incram-umbrella/registry/ids.yaml
         run: python3 tools/validate.py
+      - name: Draft workflow schema and deterministic compiler tests
+        run: python3 -m unittest tools.test_workflow_compiler

@@ -9,4 +9,4 @@ What no upstream specification defines. Everything in this folder is labeled MCP
 | Restraint policy | When MCPL may ask the person something, and when it must not: once per item, never blocking, only on a call already in flight | None. The current MCP revision carries no rate-limit guidance |
 | Approval evidence | A record a server can verify that a specific person approved a specific change | A page the application serves observes the request itself, but an authenticated request does not show whether a person or automation made it. WebAuthn user presence and user verification are the primitives to evaluate (R2 cross-check, 2026-11-13) |
 
-Not yet written. Each extension gets its own folder with a specification, examples and tests.
+`workflows/` contains the first **draft** linear test-scenario subset, a sample workflow and schema/compiler tests. It is not the full workflow/navigation extension and is not accepted MCPL. The draft's precedent review is incomplete; see `workflows/README.md`. Other extensions remain unwritten. Each extension gets its own folder with a specification, examples and tests.

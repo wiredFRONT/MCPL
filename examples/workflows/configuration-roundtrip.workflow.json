@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "mcpl.workflow/v1",
+  "id": "configuration-roundtrip",
+  "title": "Set, verify, reload, and verify a configuration value",
+  "parameters": {
+    "setting_value": { "type": "string", "minLength": 1, "maxLength": 64 }
+  },
+  "requires": {
+    "actions": ["set_config_value"],
+    "bindings": ["settings.propose", "approval.accept", "page.reload"],
+    "events": ["approval.request", "tool.completed", "run.completed"],
+    "oracles": ["settings.value"]
+  },
+  "steps": [
+    {
+      "id": "propose-setting",
+      "type": "command",
+      "binding": "settings.propose",
+      "action": "set_config_value",
+      "arguments": {
+        "key": "CLYFFY_VOICE_MODE",
+        "value": { "$param": "setting_value" }
+      },
+      "timeoutMs": 30000
+    },
+    {
+      "id": "observe-approval-request",
+      "type": "observe",
+      "event": "approval.request",
+      "match": { "action": "set_config_value" },
+      "timeoutMs": 10000
+    },
+    {
+      "id": "accept-once",
+      "type": "command",
+      "binding": "approval.accept",
+      "arguments": { "action": "set_config_value", "once": true },
+      "timeoutMs": 10000
+    },
+    {
+      "id": "observe-tool-completion",
+      "type": "observe",
+      "event": "tool.completed",
+      "match": { "action": "set_config_value" },
+      "timeoutMs": 30000
+    },
+    {
+      "id": "observe-run-completion",
+      "type": "observe",
+      "event": "run.completed",
+      "match": { "status": "succeeded" },
+      "timeoutMs": 120000
+    },
+    {
+      "id": "verify-before-reload",
+      "type": "assert",
+      "oracle": "settings.value",
+      "input": { "key": "CLYFFY_VOICE_MODE" },
+      "expected": { "key": "CLYFFY_VOICE_MODE", "value": "development" }
+    },
+    {
+      "id": "reload-application",
+      "type": "command",
+      "binding": "page.reload",
+      "arguments": {},
+      "timeoutMs": 10000
+    },
+    {
+      "id": "verify-after-reload",
+      "type": "assert",
+      "oracle": "settings.value",
+      "input": { "key": "CLYFFY_VOICE_MODE" },
+      "expected": { "key": "CLYFFY_VOICE_MODE", "value": "development" }
+    }
+  ]
+}

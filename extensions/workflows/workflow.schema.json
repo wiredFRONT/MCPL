@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/wiredFRONT/MCPL/extensions/workflows/workflow.schema.json",
+  "title": "MCPL linear workflow",
+  "description": "MCPL draft workflow profile v0.1. This is a deterministic authored scenario contract, not an accepted MCPL standard or an execution permission.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "parameters", "requires", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "mcpl.workflow/v1" },
+    "id": { "$ref": "#/$defs/id" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "parameters": {
+      "description": "MCPL. Runtime fixture values provided by the trusted application binding factory, validated before any step executes.",
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 32,
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/stringParameter" }
+    },
+    "requires": {
+      "type": "object",
+      "required": ["actions", "bindings", "events", "oracles"],
+      "additionalProperties": false,
+      "properties": {
+        "actions": { "$ref": "#/$defs/refList" },
+        "bindings": { "$ref": "#/$defs/refList" },
+        "events": { "$ref": "#/$defs/refList" },
+        "oracles": { "$ref": "#/$defs/refList" }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": { "$ref": "#/$defs/step" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-z][a-z0-9._-]*$" },
+    "refList": {
+      "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "stringParameter": {
+      "type": "object", "required": ["type", "minLength", "maxLength"], "additionalProperties": false,
+      "properties": {
+        "type": { "const": "string" },
+        "minLength": { "type": "integer", "minimum": 0, "maximum": 4096 },
+        "maxLength": { "type": "integer", "minimum": 1, "maximum": 16384 }
+      }
+    },
+    "value": {
+      "description": "MCPL. JSON data only. A parameter reference is exactly {\"$param\": \"name\"}; expressions and executable content do not exist in this profile.",
+      "oneOf": [
+        { "type": ["string", "number", "boolean", "null"] },
+        { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/value" } },
+        {
+          "type": "object", "maxProperties": 256,
+          "properties": { "$param": { "$ref": "#/$defs/id" } },
+          "required": ["$param"], "additionalProperties": false
+        },
+        {
+          "type": "object", "maxProperties": 256,
+          "not": { "required": ["$param"] },
+          "propertyNames": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "additionalProperties": { "$ref": "#/$defs/value" }
+        }
+      ]
+    },
+    "stepBase": {
+      "type": "object", "required": ["id", "type"], "properties": { "id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "command": {
+      "allOf": [
+        { "$ref": "#/$defs/stepBase" },
+        {
+          "type": "object", "required": ["type", "binding", "arguments", "timeoutMs"], "additionalProperties": false,
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "type": { "const": "command" },
+            "binding": { "$ref": "#/$defs/id" }, "action": { "$ref": "#/$defs/id" },
+            "arguments": { "type": "object", "maxProperties": 128, "additionalProperties": { "$ref": "#/$defs/value" } },
+            "timeoutMs": { "type": "integer", "minimum": 1, "maximum": 120000 }
+          }
+        }
+      ]
+    },
+    "observe": {
+      "allOf": [
+        { "$ref": "#/$defs/stepBase" },
+        {
+          "type": "object", "required": ["type", "event", "match", "timeoutMs"], "additionalProperties": false,
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "type": { "const": "observe" },
+            "event": { "$ref": "#/$defs/id" },
+            "match": { "type": "object", "maxProperties": 128, "additionalProperties": { "$ref": "#/$defs/value" } },
+            "timeoutMs": { "type": "integer", "minimum": 1, "maximum": 120000 }
+          }
+        }
+      ]
+    },
+    "assert": {
+      "allOf": [
+        { "$ref": "#/$defs/stepBase" },
+        {
+          "type": "object", "required": ["type", "oracle", "input", "expected"], "additionalProperties": false,
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "type": { "const": "assert" },
+            "oracle": { "$ref": "#/$defs/id" },
+            "input": { "type": "object", "maxProperties": 128, "additionalProperties": { "$ref": "#/$defs/value" } },
+            "expected": { "$ref": "#/$defs/value" }
+          }
+        }
+      ]
+    },
+    "step": { "oneOf": [{ "$ref": "#/$defs/command" }, { "$ref": "#/$defs/observe" }, { "$ref": "#/$defs/assert" }] }
+  }
+}

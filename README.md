@@ -2,7 +2,7 @@
 
 A schema-governed framework that lets an application act as its own subject-matter expert for any AI.
 
-**Status (2026-11-16): two schema parts written as drafts (actions; guards) with two worked examples whose guards are enforced and tested; one guard enforces an INCRAM rule by ID. Posture, screens, boundary and the four extensions are not written. No server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
+**Status (2026-11-16): action and guard schemas remain drafts, with two worked examples and a tested guard; a first linear workflow schema and deterministic Playwright compiler are also draft-only. The workflow compiler emits a test from authored JSON and an explicitly trusted host binding module; it does not execute the test or prove human approval. No MCPL server code yet.** Part of the [INCRAM](https://github.com/wiredFRONT/INCRAM) umbrella, where the decisions ledger and research live.
 
 ## The idea in six lines
 
@@ -22,7 +22,7 @@ A schema-governed framework that lets an application act as its own subject-matt
 | `extensions/` | Extend | What no upstream defines, labeled as ours: workflows and navigation, signal provenance, restraint policy, approval evidence. |
 | `routes/` | Route | Runtime choices by what the host declares it supports. |
 | `examples/` | Show | Worked cases, each with proposals that must pass and proposals that must be rejected. |
-| `tools/` | Check | `validate.py` checks every action entry and every example proposal. |
+| `tools/` | Check | `validate.py` checks action entries and proposals; `workflow_compiler.py` checks the draft linear workflow profile and emits deterministic Playwright test source. |
 
 An AI reading this repository should see three moves: these are the standards, this is how they reduce to one shape, this is what MCPL adds. Every borrowed piece traces to its official source.
 
@@ -41,7 +41,10 @@ An AI reading this repository should see three moves: these are the standards, t
 ```
 pip install jsonschema
 python3 tools/validate.py
+python3 -m unittest tools.test_workflow_compiler
 ```
+
+The workflow compiler's generated Playwright test requires an application-owned trusted binding module and an operator-run Playwright environment. See [`extensions/workflows/README.md`](extensions/workflows/README.md) for its draft contract and CLI.
 
 ## Two ways MCPL runs
 
